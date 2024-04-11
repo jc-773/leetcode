@@ -3,7 +3,7 @@ Threads, Threads, Threads...
 
 What is concurrency and why do we care?
 
-Concurrencs is simple delegating tasks to run on multiple Threads in parallel 
+Concurrency is simply delegating tasks to run on multiple Threads in parallel 
     - This is important when speaking in terms of scalibilty and possibly lowering latency 
 
 
