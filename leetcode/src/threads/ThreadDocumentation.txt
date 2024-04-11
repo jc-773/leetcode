@@ -1,0 +1,61 @@
+Threads, Threads, Threads...
+-----------------------------
+
+What is concurrency and why do we care?
+
+Concurrencs is simple delegating tasks to run on multiple Threads in parallel 
+    - This is important when speaking in terms of scalibilty and possibly lowering latency 
+
+
+Where do I get my Threads from? 
+
+Thread Pool
+- A pool of pre-instantiated, ready-to-go, reusable Threads. 
+- They executa a task, release the resource, and go back to the pool to find another task
+- It's like having some friends over to put together furniture in your new apartment. The friend is the Thread, the task is the fixing, and the pool 
+is the amount of friends you invite over. 
+    - So basically, the number of Threads in your Thread pool must be pre-determined
+
+
+Why can't I just get my Threads as I go?
+- Because the cost of creating and destroying kernel Threads is expensive (yay! Virtual Threads in JDK21)
+- Remember these Threads are resuable 
+
+
+
+Ok, tasks are running in parrallel. This could lead to data inconsistencies if Threads access code at the same time? How can we prevent that? 
+
+
+Thread Lock (a nifty tool when dealing with Concurrent programming!)
+
+Whats is a Thread lock?
+- Thread lock is a mechanism used in concurrent programming that prevents multiple threads from accessing a critical resource simultaneously
+- In this context, what makes a resource crtical is literally any resource that is, or could be, accessed by multiple threads... that simple
+    - Except immutable objects because they cannot be changed anyway so there is no pose to data inconsistency 
+- Can also be a means of communication between concurrent Threads
+    - Allowing the lock itself to coordinate execution of a locked section 
+
+
+What are some things that Thread lock enforces? 
+- Mutual Exclusion 
+     - Only one Thread can enter a critical section (section of shared resources) at a time 
+- Deadlock Prevention
+    - If you use and design locks correctly, you wont have to worry about an issue where you have more than one thread waitomg indefinitely for the other
+    Thread(s) to release locks
+
+
+What are some simple ways to implement Thread lock?
+- the synchronized keyword
+    - simply use this keyword on the method or object level to achieve and enforce Thread lock and mutual exclusion 
+- the synchorized block (the better way of the 3)
+    - syntax: synchronized(this) {//your code}
+- ReadWriteLock interface
+    - haven't done this before...
+
+
+However, there is some overhead when it comes to acquiring a lock. When developers are writing code that requires a Thread lock, they should be sure to implement locking criterion before the acquire.
+
+This is also known as double-checked locking
+- Sounds like exactly what it is; checking if a lock is necessary before actually doing a lock and additional work
+- Ideally should be done within the synchronized(this) {//your code} block
+     

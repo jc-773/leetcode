@@ -1,0 +1,91 @@
+What's with all of this pass by reference and pass by value noise?
+------------------------------------------------------------------
+
+What is pass by reference in the first place?
+    - Say you make a call to a method and pass in an argument String hello 
+    - The receiving method doesnt get the literal "hello". Instead, they get the location where hello can be found 
+
+This results in pass by value being the opposite
+    - The receiving method gets the literal value "hello" and not the location where hello can be found
+
+An analogy that I like to use is a kid has a box of crayons and tells his friend where the red crayon can be found. He then leaves it up to his friend to find the red crayon
+based on the location that he gave him 
+Pass by value would be the kid actually giving his friend the red crayon 
+
+
+Now, here is where it gets tricky. Java is pass by value... with a twist
+
+When we pass a primitive type as an argument to a method, Java creates a copy of that value and sends it to the method. This means whatever changes to that variable that happen inside 
+of that method wont affect the original variable's value 
+
+When we pass an object as an argument to a method, yes we are passing the memory address to that object as an argument. But, we are passing that memory address as a copied value. So it's 
+kinda both. 
+
+Regardless the orgiinal variable's value is still found by that memory address that we pass in as a value. 
+
+So whatever changes you make inside of that method, will affect the object outside of that method because it still points to that object's memory address
+
+
+--- Data Structures ---
+
+ArrayList
+----------
+
+An ArrayList is a resizable array implementation of the List interface. What that means is when you instantiate an ArrayList it internally creates an array [] with an initial capacity of 10 
+by default unless you specify otherwise (via the ArrayList constructor)
+
+Pros
+    - dynamic resizing
+        - if your array list needs to grow, no worries. An array list can automatically resize itself when adding or removing elements.
+    - it is indexed so time complexity for get and set operations is O(1)
+    - maintains order of elements
+    - lots of nifty methods to use 
+
+Cons
+    - When adding, removing (because it is indexed) can be perfomance taxing because all elements must shift to their new positions
+    - Not thread-safe 
+        - could use a Vecor or Collections.synchorizedList() though. Im not sure if Collections.synchorizedList() will affect the dynamicness of the ArrayList itself though. 
+
+
+Hash Map basics
+---------------
+
+A hash map is a key-value data structure belonging to the Collections framework 
+
+Pros
+    - Can quickly retrieve data by key 
+        - when a key is added to a hash map, its hashcode() method is called to calculate the hashcode
+        - The hash code is then used to compute an index within the underlying array of the hash map where the entry will be placed
+        - The reason for this is to evenly distribute entries accross the underlying array 
+        - This SIGNIFICANTLY speeds up operations like adding, moving, and retrieving
+            - Because we have the hash code to the key, these operations have a time complexity of O(1) where the time of the operation does not increase when the size of the map increases
+    - Can be used when dealing with incomplete data because hash map supports null key and values 
+    - Default hash map is optimized for single-thread usage 
+
+Cons
+    - Unsynchronized
+        - Hash maps are not thread safe by default 
+        - but... you can use whats called a concurrent hash map, which is basically a thread-safe hash map
+    - Cannot store duplicates
+
+
+
+--- Interfaces ---
+
+Queus
+------
+
+A queue is an interface belonging to the Collections framework
+
+Pros
+    - Intutive FIFO which leads to predictability and consistency
+    - Thread safe implementations ConcurrentLinkedQueue and BlockingQueue
+
+Cons
+    - Limited access to it's elements. Typically allows removal of the top-most or head element only 
+    - Can be perfomance limiting when dealing with thread-safe queue implementations 
+        - the overhead may affect performance in high throughput scenarios 
+
+
+
+

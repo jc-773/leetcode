@@ -7,4 +7,6 @@ public class App {
         LongestSubstringWithoutRepeatingChars lswrc = new LongestSubstringWithoutRepeatingChars();
         lswrc.lengthOfLongestSubstring(a);
     }
+
+
 }
