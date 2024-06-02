@@ -1,0 +1,102 @@
+Sliding Window Technique 
+-------------------------
+
+Longest Substring Without Repeating Characters
+-----------------------------------------------
+- We have two int variables both starting at the first index
+- We will keep expanding the right side of the window until a certain condition is met
+- At the point that said condition is met, we will move the left side of the window
+- This window will be shrinking and expanding throughout the iteration 
+
+Conditions:
+- We make use of the String indexOf(char, indexToStartFrom) method
+    - this method will return an integer that represents the index of the first occurence of passed char it finds, starting from the integer position passed in in the second argument
+    - int indexOfCharacter = s.indexOf(s.charAt(right), left);
+- At this point have an integer representation of where the character we are focused is
+
+Decisions:
+- If the indexOfCharacter does not equal the right side of our moving window, then we know that character has been found and therefore is not unique 
+- So, once we know that character is not unique, we move the left side of the window to where the index is of the un-unique character 
+
+Return:
+- We use the math.max() method to determine the highest value between itself and the size of the window (right - left + 1)
+
+lr
+S T T E I I I V
+
+l r
+S T T E I I I V
+
+  lr
+S T T E I I I V
+
+    lr
+S T T E I I I V
+
+    l r
+S T T E I I I V
+
+    l   r 
+S T T E I I I V   ---> 4 - 2 + 1 = 3
+
+      lr
+S T T E I I I V
+
+      l r
+S T T E I I I V
+
+etc...
+
+
+Determine if String is a palindrome
+------------------------------------
+- We have two pointers, one starting at the begging of the String, and the other starting at the end of the String
+- This window will shrink after ever iterarion, and at the very instant that the left pointer is greater than the right pointer than we are done
+
+Conditions:
+- As long as at char found at the left and right pointers match, while the left pointer is less than the right pointer, then the String is a palindrome
+
+Desicions:
+- When we evaluate the chars found at left pointer and right pointer and we determine that they are not equal, we will return false and break out of the method.
+- Otherwise the window will continue to shrink until left is no longer greater than right
+- At that point we must assume the string is a palindrome and return true
+
+l           r
+R A C E C A R 
+
+  l       r
+R A C E C A R 
+
+    l   r       
+R A C E C A R 
+
+   l   r       
+R A C E C A R 
+
+      lr      
+R A C E C A R 
+
+
+Reverse String of chars with 0(1) memory
+----------------------------------------
+
+This is similar to the palindrome question above. 
+
+The tricky part about this is it has to be done with 0(1) memory. So no newly created arrays or anything to store the chars from the passed in array
+
+Creates a left pointer at the beginning of the array and a right pointer at the end of the array
+
+While the left pointer is less than the right pointer,
+
+Swap the values from char[left] with char[right]
+
+Increment left and decrement right
+
+l       r
+H E L L O
+
+  l   r
+H E L L O
+
+   lr
+H E L L O

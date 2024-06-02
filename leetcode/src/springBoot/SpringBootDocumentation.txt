@@ -1,0 +1,133 @@
+Spring Boot
+-------------
+
+Spring Boot is a framework that simplies:
+    - starting up a standalone server
+        - also has an in-memory database
+    - dependency injection via IoC (Assuming the Singleton Bean scope)
+        - Declare Bean --> Scan for Beans --> Find Beans --> Put Beans in Spring IoC container --> Constructor of Bean is compiled --> Dependencies of Bean are found by type in the IoC container -->
+        Instantiated --> Passed to the Bean constructor via paramter --> Then the Bean is instantied 
+        - Keep in mind that a Bean's dependencies are injected before the Bean itself is instantiated 
+    - Boilerplate removal
+        - Annotations prevent the need to write a lot of boilerplate
+
+    
+Spring IoC Container and How it works 
+--------------------------------------
+
+* Startup
+When a Spring Boot application starts, it initializes the Spring IoC container. 
+As part of this process, ComponentScan scans the project for components and registers them as Beans in the IoC container
+
+* Bean Creation
+For each Bean the IoC manages it's entire lifecycle from creation to destruction
+The container also looks at dependencies that need to be injected into each Bean and instantiates them first before the Bean itself
+
+* Dependency Injection via @Autowired
+The most common way to use this is through Constructor Injection. This lets Spring know the location of the injection that needs to place 
+This instantiates the Bean and injects all of its dependencies as constructor parameters
+It is helpful to know that Spring will instantiate all of it's dependencies first before injecting them into the Bean 
+    - This means that by the time the Bean's constructor is called, it's dependencies are fully initialized and ready to be used 
+
+Spring IoC Bean Container
+______________________
+|
+|
+|
+|MyService3
+|MyService2
+|MyService1
+|_____________________
+
+
+@Controller
+public class MyController {
+    private final MyService1;
+
+    @Autowired
+    public MyController(MyService1 myService1) {
+        this.myService1 = myService1
+    }
+}
+
+When the MyController constructor is called, the Spring Framework will look at the type of the object passed in as argument in the constructors parameter and see if that type is found in the Spring IoC container
+If Spring finds exactly one bean that matches the type of the parameter, it will use that bean (from the container) as the argument when it creates a new instance of the bean we are injecting (MyController)
+    - In Pseudo, this will look something like myService1 = new MyService1() --> this.myService = myService1;
+
+
+Annotations and why they are important 
+-----------------------------------------
+
+A lot of spring boot functionality is based on annotations - some we deem more important than others, given the context of the application. 
+Here are some of the critical annotations used as the foundation for your Spring Boot application
+
+
+@SpringBootApplication 
+    - This annotation encompasses several other important annotations 
+
+@EnableAutoConfiguration
+    - Automatically configures your application based on the jar dependencies you have found in your class path
+
+@ComponentScan
+    - Is used to specify the packages that the Spring framework should scan for components.
+    - Once scanned and found, components will automatically register as beans in the Spring container 
+
+@Configuration
+    - This annotation tells application context (?) where we have defined our Beans
+    - Is it ok to have more than 1 @Configuration class?
+
+@Bean 
+    - An object you create and hand over to the application context. This container will store that object for later use ***
+
+Component 
+    - are classes annotated with @Component, @Service, @Repository, or @Controller 
+
+
+
+Beans
+-------
+
+How are Beans created?
+There are 3 ways to create a Bean. I know of 2 of the ways - as I do not have any experience creating a Bean in xml
+
+1. Annotation-based Configuration   
+    - In the event you have an object, say a service that implements an interface, you can annotate that class with the @Service annotation. 
+    - What this will do is ComponentScan will scan the class path for any of the @Component, @Service, @Repository, or @Controller annotations and register them as Beans
+
+2. Java-based Configuration
+    - In the event we have the same service mentioned above, instead of annotating with the @Service annotation, we can go into our @Configuration class and define the Bean "manually"
+    - This method provides more control over Bean instantiation and DI
+
+    Here is an example of how to create a Bean using Java-based configuration:
+
+    @Configuration 
+    public class MyClass {
+        @Bean
+        public MyService myService() {
+            return new MyService();
+        }
+    }
+
+When a Bean is found during scan, and registered with the Spring IoC container, when and how does it get instantiated?
+
+
+
+Bean Scopes
+Spring Beans can have different scopes, which defines the visibility and the lifecycle of the Bean in the application 
+
+    - Singleton (default): Only one instance of the Bean is created per Spring IoC container 
+    - Protoype: A new instance is created every time the Bean is requested 
+    - Request: A single instance created for each HTTP request 
+    - Session: A single instance is created for each HTTP session
+
+
+
+Autowired 
+//TODO: But basically tells Spring where do we want to inject the beans from the container 
+
+
+
+
+
+
+

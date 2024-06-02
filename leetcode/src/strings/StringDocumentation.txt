@@ -1,0 +1,14 @@
+Strings
+
+String Immutable
+
+String Pool
+
+- Also known as the intern pool 
+    - this is where Java stores all of the string literals after they are created
+    - when a String is created, Java checks the String pool to see if a literal exists with that same value
+    - if there is a literal with the same value, Java will point the new variable to the memeory address of the already existing literal
+    - this eliminates the creation of duplicate values - ulitmately saving space
+- 
+
+
