@@ -100,3 +100,34 @@ H E L L O
 
    lr
 H E L L O
+
+
+Reverse vowels of String
+-------------------------
+
+This algorithm is simple, yet tricky. We have two pointers that operate independently and will have to continue closing on one side until a specific condition is met. 
+You could practice without checking for vowels. Just to get used to the operation itself.
+
+
+- This problem is similar to the reverse String problem above in the sense that we will have two pointers left and right on the beginning and end bounds of our string 
+- The only differences are we only swap the vowels and not just every character in the array, and we get a String passed in and not a char array
+
+ALWAYS DO YOUR DUEDILLIGENCE!
+
+AND KNOW YOUR DATA TYPES!
+
+- The type that is being passed into this method is a String
+- So let's start by converting the string to a charArray
+    - char [] array = string.toCharArray();
+
+- We are only swapping vowels, so we need a data structure to store vowels 
+    - an inexperienced developer would create a separate method and check the char against all possible vowel types
+- Instead, let us create a Set to store vowels
+    - Set<Characters> vowels = new HashSet<>;
+    - vowels.add('i'); etc...
+
+The algorithm is as followed:
+- While left is less than right
+- Find left vowel as long as left is less than right and char is not in Set then increment left
+- Find right vowel as long as left is less than right and char is not in Set then decrement right
+- Swap and increment left and decrement right 
