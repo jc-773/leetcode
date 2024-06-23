@@ -8,33 +8,35 @@ import java.util.Map;
 import java.util.Set;
 
 public class StringProblems {
- 
+
+    
+    
     /**
-     *  l r
+     * l r
      * [1,0,1]
      * 
      * @param nums
      */
-    public static int [] moveZeroes(int[] nums) {
-       
+    public static int[] moveZeroes(int[] nums) {
+
         int index = 0;
-        for(int i = 0; i < nums.length; i++) {
-            if(nums[i] > 0) {
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
                 nums[index++] = nums[i];
             }
         }
 
-        for(int i = index; i < nums.length; i++) {
+        for (int i = index; i < nums.length; i++) {
             nums[i] = 0;
         }
 
         return nums;
     }
 
-    public static int [] convertHashSetToArray(Set<Integer> convertThisSet) {
-        int [] array = new int[convertThisSet.size()];
+    public static int[] convertHashSetToArray(Set<Integer> convertThisSet) {
+        int[] array = new int[convertThisSet.size()];
         int index = 0;
-        for(int num : convertThisSet) {
+        for (int num : convertThisSet) {
             array[index++] = num;
         }
 
@@ -42,28 +44,28 @@ public class StringProblems {
     }
 
     public int[] intersection(int[] nums1, int[] nums2) {
-    // store nums1 in a hash set to remove all duplicates 
-      Set<Integer> numsOneSet = new HashSet<>();
-      for(int nums : nums1) {
-        numsOneSet.add(nums);
-      }
-
-    //get all the intersected elements and store in a hash set
-      Set<Integer> numsTwoSet = new HashSet<>();
-      for(int nums: nums2) {
-        if(numsOneSet.contains(nums)) {
-            numsTwoSet.add(nums);
+        // store nums1 in a hash set to remove all duplicates
+        Set<Integer> numsOneSet = new HashSet<>();
+        for (int nums : nums1) {
+            numsOneSet.add(nums);
         }
-      }
 
-    // convert the interected set to an array and return it
-      int [] intersectionArray = new int[numsTwoSet.size()];
-      int index = 0;
-      for(int nums: numsTwoSet) {
-        intersectionArray[index++] = nums;
-      }
+        // get all the intersected elements and store in a hash set
+        Set<Integer> numsTwoSet = new HashSet<>();
+        for (int nums : nums2) {
+            if (numsOneSet.contains(nums)) {
+                numsTwoSet.add(nums);
+            }
+        }
 
-      return intersectionArray;
+        // convert the interected set to an array and return it
+        int[] intersectionArray = new int[numsTwoSet.size()];
+        int index = 0;
+        for (int nums : numsTwoSet) {
+            intersectionArray[index++] = nums;
+        }
+
+        return intersectionArray;
 
     }
 
@@ -228,21 +230,26 @@ public class StringProblems {
      * l r
      * W E L C L O M E
      * 
+     * Essentially, expanding the right side of the window for ever unique character
+     * If the character is not unique, we stop and move the left side of the window to where the initial non-unique character is 
+     * 
+     * 
      * @param a
      * @return
      */
     public static int longestSubstringWithoutRepeatingCharacters(String a) {
-        int max = 0;
+       int max = 0;
 
-        for (int left = 0, right = 0; right < a.length(); right++) {
-            int indexOfChar = a.indexOf(a.charAt(right), 0);
+       for(int left = 0, right = 0; right < a.length(); right++) {
+        int indexOfCharacter = a.indexOf(a.charAt(right), 0);
 
-            if (indexOfChar != right) {
-                left = indexOfChar + 1;
-            }
-            max = Math.max(max, right - left + 1);
+        if(indexOfCharacter != right) {
+            left = indexOfCharacter + 1;
         }
-        return max;
+        max = Math.max(max, right - left + 1);
+       }
+
+       return max;
     }
 
     /**

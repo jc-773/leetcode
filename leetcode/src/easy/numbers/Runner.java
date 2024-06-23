@@ -4,9 +4,9 @@ public class Runner {
     public static final NumberProblems problems = new NumberProblems();
 
     public static void main(String[] args) {
-        int [] a = {2,5,6,3,8};
-        int [] reverseOdds = problems.reversOdd(a);
-        printArray(reverseOdds);
+        int [] a = {1,2,3,1,1,3};
+        int b = problems.numIdenticalPairs_(a);
+        System.out.println("count: " + b);        
     }
 
     private static void printArray(int [] a) {
