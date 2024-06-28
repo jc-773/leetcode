@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class SlidingWindows {
     public static final String s = "abzcabcbb";
-    public static final int[] sumWindow = { 1, 4, 2, 9, 1, 3, 2, 7, 5 };
+    public static final int[] sumWindow = { 5,4,-1,7,8};
     public static final int[] processDup = { 5, 4, 2, 4, 1, 2, 2, 4, 1 };
     public static final int[] moveZeros = { 0, 1, 0, 3, 12 };
     public static final int[] concatenation = { 1, 2, 1 };
@@ -17,42 +17,76 @@ public class SlidingWindows {
     public static final Set<Integer> mySet = new HashSet<>();
 
     public static void main(String[] args) {
-        // mySet.add(5);
-        // mySet.add(4);
-        // mySet.add(2);
-        // mySet.add(15);
-        // mySet.add(8);
-
-        // printArray(convertedArray(mySet));
-
-        //findTargetFormulaInMap(processDup, 6);
-
-        reverseStringLoop("Hello");
+        maxSubArray(sumWindow);
+        
     }
 
     /* SLIDING WINDOW */
 
-    // return the largest sum of k windows within an array
-    //
-    // {1,4,2,9,1,3,2,7,5};
-    public static int sumOfLargestWindow(int[] a, int k) {
+
+    //53. Maximum Subarray
+    public static int maxSubArray(int[] nums) {
         int max = 0;
-
-        for (int i = 0; i < k; i++) {
-            max += a[i];
+        for(int i = 0; i < nums.length; i++) {
+            max += nums[i];
         }
 
-        int windowSum = max;
-        for (int i = k; i < a.length; i++) {
-            windowSum += a[i] - a[i - k];
-            max = Math.max(max, windowSum);
+
+        int sum = 0;
+        for(int left = 0, right = 0; right < nums.length; right++) {
+           sum += nums[right];
+           max = Math.max(max, sum);
+
+            if(sum < max) {
+                sum -= nums[left++];
+            }
         }
-        System.out.println("Max: " + max);
         return max;
     }
 
+    // return the largest sum of k windows within an array
+    //          i
+    // {1,4,2,9,1,3,2,7,5};
+    public static int sumOfLargestWindow(int[] a, int k) {
+        int sum = 0;
+        for(int i = 0; i < k; i++) {
+            sum += a[i];
+        }
+
+        int windowSum = sum;
+        int max = 0;
+        for(int i = k; i < a.length; i++) {
+            windowSum += a[i] - a[i-k];
+            max = Math.max(max, windowSum);
+        }
+        return max;
+    }
+    
+    
+
     /* ARRAYS */
 
+    //209. Minimum Size Subarray Sum - SAME INDEX
+    public static int minSubArrayLen(int target, int[] nums) {
+        int min = Integer.MAX_VALUE;
+        int sum = 0;
+        for(int left = 0, right = 0; right < nums.length; right++) {
+            sum += nums[right];
+            if(sum <= target) {
+               continue;
+            }
+            if(sum >= target) {
+                int windowSize = right - left;
+                min = Math.min(min, windowSize);
+                left++;
+                right = left + 1;
+            }
+        }
+        if(sum < target) {
+            return 0;
+        }
+        return min;
+    }
 
     /**
      * Leetcode 1768
