@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class LeetCode75 {
 
-    public static final int[] array = {7,6,4,3,1};
+    public static final int[] array = {1,1,1,0,0,0,1,1,1,1,0};
     public static final int[] nums1 = { 1, 1, 0, 1, 0, 0, 1, 0, 1 };
     public static final int[] nums2 = { 1, 1, 2, 2 };
     public static final int[] maxAreaArray = { 1, 8, 6, 2, 5, 4, 8, 3, 7 };
@@ -31,7 +31,7 @@ public class LeetCode75 {
     public static final List<String> listOfStrings = new ArrayList<>();
 
     public static void main(String[] args) {
-       
+        longestOnes(array, 2);
     }
 
     /* BRUTE FORCE APPROACHES */
@@ -55,84 +55,95 @@ public class LeetCode75 {
 
     // 1207. Unique Number of Occurrences
     public static boolean uniqueOccurrences(int[] arr) {
-        Map<Integer,Integer> map = new HashMap<>();
-
+        Map<Integer, Integer> map = new HashMap<>();
         for(int i : arr) {
             map.put(i, map.getOrDefault(i, 0) + 1);
         }
-
         Set<Integer> set = new HashSet<>();
-
         for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
             set.add(entry.getValue());
         }
-
         return set.size() == map.size();
     }
 
     //169. Majority Element
     public static int majorityElement(int[] nums) {
-        Map<Integer, Integer> map = new HashMap<>();
-        for(int i : nums) {
-            map.put(i, map.getOrDefault(i, 0) + 1);
-        }
+       int mostOccurences = 0;
+       Map<Integer, Integer> map = new HashMap<>();
+       for(int i : nums) {
+        map.put(i, map.getOrDefault(i, 0) + 1);
+       }
 
-        int max = Integer.MIN_VALUE;
-        int highestOccurence = 0;
-        for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
+       int max = 0;
+       for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
             if(entry.getValue() > max) {
                 max = entry.getValue();
-                highestOccurence = entry.getKey();
-
+                mostOccurences = entry.getKey();
             }
-        }
-        return highestOccurence;
+       }
+       return mostOccurences;
     }
 
     /* ARRAYS */
+    public static boolean canPlaceFlowers(int[] flowerbed, int n) {
+        int count = 0;
+
+        for(int i = 0; i < flowerbed.length; i++) {
+            if(flowerbed[i] == 0) {
+                boolean left = (i == 0 || flowerbed[i-1] == 0);
+                boolean right = (i == flowerbed.length-1 || flowerbed[i+1] == 0);
+
+                if(left && right) {
+                    count++;
+                }
+            }
+        }
+        return count > n;
+    }
 
     // 1493. Longest Subarray of 1's After Deleting One Element
     public static int longestSubarray(int[] nums) {
-        int zeroCount = 0; int windowSum = 0; int start = 0;
-  
+        int windowSize = 0;
+        int start = 0;
+        int zeroCount = 0;
+
         for(int i = 0; i < nums.length; i++) {
-          zeroCount += (nums[i] == 0 ? 1 : 0);
-  
-          while(zeroCount > 1) {
-              zeroCount -= (nums[start] == 0 ? 1 : 0);
-              start++;
-          }
-          windowSum = Math.max(windowSum, i - start);
+            zeroCount += nums[i] == 0 ? 1 : 0;
+
+            while(zeroCount > 1) {
+                zeroCount -= nums[start] == 0 ? 1 : 0;
+                start++;
+            }
+
+            windowSize = Math.max(windowSize, i - start);
         }
-        return windowSum;
+        return windowSize;
       }
 
-    // 1470. Shuffle the Array
+    // 1470. Shuffle the Arrays
     public static int[] shuffle(int[] nums, int n) {
-        int half = nums.length / 2;
-        int[] firstHalf = new int[half];
-        int[] secondHalf = new int[half];
+      int half = nums.length / 2;
+      int [] xArray = new int [half];
+      int [] yArray = new int [half];
 
-        for (int i = 0; i < half; i++) {
-            firstHalf[i] = nums[i];
+      for(int i = 0; i < xArray.length; i++) {
+        xArray[i] = nums[i];
+      }
+      int index = 0;
+      for(int i = half; i < nums.length; i++) {
+        yArray[index++] = nums[i];
+      }
+    
+      int xIndex = 0;
+      int yIndex = 0;
+      for(int i = 0; i < nums.length; i++) {
+        if(i % 2 == 0 || i == 0) {
+            nums[i] = xArray[xIndex++];
+        }else {
+            nums[i] = yArray[yIndex++];
         }
-
-        for (int i = half; i < nums.length; i++) {
-            secondHalf[i - half] = nums[i];
-        }
-
-        // should we use pointers here?
-        int left = 0;
-        int right = 0;
-        for (int i = 0; i < nums.length; i++) {
-            if (i % 2 == 0) {
-                nums[i] = firstHalf[left++];
-            } else {
-                nums[i] = secondHalf[right++];
-            }
-        }
-
-        return nums;
+      }
+      return nums;
     }
 
     // 2215. Find the Difference of Two Arrays
@@ -206,109 +217,146 @@ public class LeetCode75 {
         }
     }
 
-    public int[] twoSum(int[] numbers, int target) {
-        Set<Integer> nonDuplicateNumbers = new HashSet<>();
-        for(int i : numbers) {
-            nonDuplicateNumbers.add(i);
+    //1. Two Sum - Easy
+    public static int[] twoSum(int[] numbers, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < numbers.length; i++) {
+            map.put(numbers[i], i);
         }
 
-        for(int i = 0; i < nonDuplicateNumbers.size(); i++) {
+        for(int i = 0; i < numbers.length; i++) {
             int num = numbers[i];
             int diff = target - num;
 
-            if(nonDuplicateNumbers.contains(diff)) {
-                return new int [] {diff, num};
+            if(map.containsKey(diff) && map.get(diff) != i) {
+               int index = map.get(diff);
+               return new int [] {index, i};
             }
-
-            nonDuplicateNumbers.add(diff);
         }
         return new int [] {};
     }
 
-    //Two Integer Sum - NeetCode 150
-    //This works, but it isn't the solution that NeetCode was looking for. Sorting throws the "correct" returned indexes off
+    //167. Two Sum II - Input Array Is Sorted - Medium
     public static int[] twoSumSorted(int[] nums, int target) {
-        Arrays.sort(nums);
-        int left = 0;
-        int right = nums.length-1;
-        int [] returnArray = new int [2];
-        while(left < right) {
-            int sum = nums[left] + nums[right];
-            if(sum > target) {
-                right--;
-            }
-            else if(sum < target) {
-                left++;
-            }
-            else {
-                returnArray[0] = left;
-                returnArray[1] = right;
-                return returnArray;
-            }
+       int left = 0;
+       int right = nums.length - 1;
+
+       while(left < right) {
+        int currentSum = nums[left] + nums[right];
+
+        if(currentSum < target) {
+            left++;
+        }else if(currentSum > target) {
+            right--;
+        }else {
+            return new int [] {left + 1, right + 1};
         }
-        return returnArray;
+       }
+       return new int [] {};
     }
 
     /* STRINGS */
 
-     // 1119. Remove Vowels from a String
-     public static String removeVowels(String s) {
-        String replace = s.replaceAll("[aeiouAEIOU]", "");
-        return replace;
+    public static String reverseWords151(String s) {
+        List<String> list = new ArrayList<>();
+        String [] sArray = s.split(" ");
+        for(int i = 0; i < sArray.length; i++) {
+            if(!sArray[i].isEmpty()) {
+                list.add(sArray[i]);
+            }
+        }
+
+        String reversed = "";
+        Collections.reverse(list);
+        for(int i = 0; i < list.size(); i++) {
+            reversed += list.get(i) + " ";
+        }
+        return reversed.trim();
     }
 
-    // 557. Reverse Words in a String III
+     //1119. Remove Vowels from a String
+     public static String removeVowels(String s) {
+        String regex = "[aeiouAEIOU]";
+        return s.replaceAll(regex, "");
+     }
+
+    //557. Reverse Words in a String III
     public static String reverseWords(String s) {
-        String[] words = s.split("\\s+");
-        String newWord = "";
-        for (String word : words) {
-            newWord += reverseWord(word) + " ";
-        }
-        String clean = newWord.trim();
-        return clean;
+        return null;
     }
 
      // 1456. Maximum Number of Vowels in a Substring of Given Length
     public static int maxVowels(String s, int k) {
-        Set<Character> vowels = new HashSet<>();
-        vowels.add('a');
-        vowels.add('e');
-        vowels.add('i');
-        vowels.add('o');
-        vowels.add('u');
+       String vowels = "aeiouAEIOU";
+       Set<Character> set = new HashSet<>();
+       for(char c : vowels.toCharArray()) {
+        set.add(c);
+       }
 
-        int count = 0;
-        for (int i = 0; i < k; i++) {
-            if (vowels.contains(s.charAt(i))) {
-                count++;
-            }
+       int max = 0;
+       for(int i = 0; i < k; i++) {
+        if(set.contains(s.charAt(i))) {
+            max++;
         }
-        int answer = count;
-        for (int i = k; i < s.length(); i++) {
-            if (vowels.contains(s.charAt(i))) {
-                count++;
+       }
+
+       int windowSum = max;
+       for(int i = k; i < s.length(); i++) {
+            if(set.contains(s.charAt(i))) {
+                windowSum++;
             }
-            if (vowels.contains(s.charAt(i - k))) {
-                count--;
+            if(set.contains(s.charAt(i-k))) {
+                windowSum--;
             }
-            answer = Math.max(answer, count);
-        }
-        return answer;
+            max = Math.max(max, windowSum);
+       }
+       return max;
     }
 
     // 392. Is Subsequence
-    public boolean isSubsequence(String s, String t) {
+    public static boolean isSubsequence(String s, String t) {
         int left = 0;
         int right = 0;
 
-        while (left < s.length() && right < t.length()) {
-            if (s.charAt(left) == t.charAt(right)) {
+        while(left < s.length() && right < t.length()) {
+            if(s.charAt(left) == t.charAt(right)) {
                 left++;
             }
-            right++;
+                right++;
+            
+        }
+        return left == s.length();
+    }
+
+    public static String reverseVowels(String s) {
+        String regex = "aeiouAEIOU";
+        Set<Character> set = new HashSet<>();
+        char [] c = regex.toCharArray();
+        for(char character : c) {
+            set.add(character);
         }
 
-        return left == s.length();
+        int left = 0;
+        int right = s.length()-1;
+        char [] sArray = s.toCharArray();
+        while(left < right) {
+            if(set.contains(sArray[left]) && set.contains(sArray[right])) {
+                char temp = sArray[left];
+                sArray[left] = sArray[right];
+                sArray[right] = temp;
+                left++;
+                right--;
+            }
+            else if(!set.contains(sArray[left])) {
+                left++;
+            }
+            else if(!set.contains(sArray[right])) {
+               right--;
+            }
+        }
+        String returnString = new String(sArray);
+        
+        return returnString;
     }
 
     public static boolean checkInclusion(String s1, String s2) {
@@ -330,6 +378,7 @@ public class LeetCode75 {
         if(c[index++] == h[index++]) {
 
         }
+        
        }
        return true;
     }
@@ -364,22 +413,28 @@ public class LeetCode75 {
         return true;
      }
 
+     /*
+      * Constraints: 
+        s.length = t.length
+        sort
+        compare
+      */
     public boolean isAnagram(String s, String t) {
         if(s.length() != t.length()) {
             return false;
         }
-        char[] sArray = s.toCharArray();
-        char[] tArray = t.toCharArray();
+
+        char [] sArray = s.toCharArray();
+        char [] tArray = t.toCharArray();
 
         Arrays.sort(sArray);
         Arrays.sort(tArray);
 
         for(int i = 0; i < sArray.length; i++) {
-            if(sArray[i] != tArray[i]){
+            if(sArray[i] != tArray[i]) {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -430,7 +485,7 @@ public class LeetCode75 {
                 k--;
             }
             if (k < 0) {
-                k += 1 - nums[left];
+                k += 1 - nums[left]; // this one minus left will return 1 if nums[left] = 0
                 left++;
             }
         }
@@ -482,7 +537,7 @@ public class LeetCode75 {
         if(height[left] <= height[right]) {
             left++;
         }else {
-            right++;
+            right--;
         }
       }
         return max;
