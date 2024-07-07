@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class LeetCode75 {
 
-    public static final int[] array = {1,1,1,0,0,0,1,1,1,1,0};
+    public static final int[] array = {4,3,2,7,8,2,3,1};
     public static final int[] nums1 = { 1, 1, 0, 1, 0, 0, 1, 0, 1 };
     public static final int[] nums2 = { 1, 1, 2, 2 };
     public static final int[] maxAreaArray = { 1, 8, 6, 2, 5, 4, 8, 3, 7 };
@@ -31,7 +31,7 @@ public class LeetCode75 {
     public static final List<String> listOfStrings = new ArrayList<>();
 
     public static void main(String[] args) {
-        longestOnes(array, 2);
+        findDisappearedNumbers(array);
     }
 
     /* BRUTE FORCE APPROACHES */
@@ -52,6 +52,26 @@ public class LeetCode75 {
     }
 
     /* HASH MAPS */
+
+    public static String frequencySort(String s) {
+        return null;
+    }
+
+    //448. Find All Numbers Disappeared in an Array
+    public static List<Integer> findDisappearedNumbers(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+       for(int i : nums) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+       }
+
+       for(int i = 0; i < nums.length; i++) {
+            if(!map.containsKey(i + 1)) {
+                list.add(i);
+            }
+       }
+       return list;
+    }
 
     // 1207. Unique Number of Occurrences
     public static boolean uniqueOccurrences(int[] arr) {
@@ -474,6 +494,19 @@ public class LeetCode75 {
         }
         return max;
     }
+
+    //1512. Number of Good Pairs
+    //this accumulates the count of i found in the value of the map
+    public static int numIdenticalPairs(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+         int count = 0;
+ 
+         for(int i : nums) {
+             count += map.getOrDefault(i, 0);
+             map.put(i, map.getOrDefault(i, 0) + 1);
+         }
+         return count;
+     }
 
     // 1004. Max Consecutive Ones III
     // 1,1,1,0,0,0,1,1,1,1,0
